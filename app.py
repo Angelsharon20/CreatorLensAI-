@@ -24,7 +24,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 st.set_page_config(
     page_title="CreatorLens AI 2.0",
-    page_icon="🔴",
+    page_icon="🧿",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -32,75 +32,79 @@ st.set_page_config(
 # =============================================================================
 # 1. CUSTOM CSS / PROFESSIONAL STYLING LAYER
 # =============================================================================
-
 C = dict(
-    bg="#DCE3E8", card="#141416", border="#232326", coral="#FF3E30", coral2="#FF8A5C",
-    olive="#9BAA3C", text="#F4F4F5", muted="#8A8A93", amber="#F5A524", green="#4ADE80",
-    deep="#7F1D1D",
+    bg="#F7F5FF", card="#FFFFFF", border="#E7E2F3", accent="#7C6CF0", accent2="#B39DF7",
+    mint="#4FBF9F", text="#2B2540", muted="#7A7592", amber="#F2A65A", green="#2E9E7C",
+    rose="#E5708F", soft="#CFC7F8",
 )
-
 
 APP_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root{
-  --bg:#0B0B0C; --card:#141416; --border:#232326; --coral:#FF3E30; --coral2:#FF8A5C;
-  --olive:#9BAA3C; --text:#F4F4F5; --muted:#8A8A93; --amber:#F5A524; --green:#4ADE80;
+  --bg:#F7F5FF; --card:#FFFFFF; --border:#E7E2F3; --accent:#7C6CF0; --accent-dark:#5444D1; --accent-soft:#EFEBFF;
+  --mint:#4FBF9F; --text:#2B2540; --muted:#7A7592; --peach:#F2A65A; --rose:#E5708F; --green:#2E9E7C;
+  --shadow:0 4px 20px rgba(110,90,200,.10);
 }
 html, body, .stApp, [class*="css"]{ font-family:'Inter','Segoe UI',sans-serif; }
-.stApp{ background:var(--bg); color:var(--text); }
+.stApp{ background:linear-gradient(180deg,#F7F5FF 0%,#FBF8FF 55%,#F4F8FF 100%); color:var(--text); }
 header[data-testid="stHeader"]{ background:transparent; }
 #MainMenu, footer{ visibility:hidden; }
 .block-container{ padding-top:1.3rem; padding-bottom:3rem; max-width:1500px; }
 [data-testid="stMarkdownContainer"] p, [data-testid="stMarkdownContainer"] li{ color:var(--text); }
+[data-testid="stWidgetLabel"] p{ color:var(--text); font-weight:600; }
 h1,h2,h3,h4{ color:var(--text); letter-spacing:-0.01em; }
 
 /* ---------- Sidebar ---------- */
-[data-testid="stSidebar"]{ background:#0F0F11; border-right:1px solid var(--border); }
+[data-testid="stSidebar"]{ background:linear-gradient(180deg,#FFFFFF 0%,#F6F2FF 100%); border-right:1px solid var(--border); }
 [data-testid="stSidebar"] .block-container{ padding-top:1rem; }
 .brand{ display:flex; align-items:center; gap:12px; padding:6px 6px 18px 6px; }
-.brand-logo{ width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(135deg,#FF3E30,#B3150B); box-shadow:0 0 22px rgba(255,62,48,.45); font-size:18px; }
-.brand-name{ font-weight:800; font-size:17px; line-height:1.1; color:#fff; }
+.brand-logo{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#B9ACFA,#F4B9D8); box-shadow:0 6px 18px rgba(124,108,240,.30); font-size:20px; }
+.brand-name{ font-weight:800; font-size:17px; line-height:1.1; color:var(--text); }
 .brand-sub{ font-size:11px; color:var(--muted); letter-spacing:.04em; }
-.side-label{ font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5F5F69; margin:22px 0 8px 6px; }
+.side-label{ font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#A29DBD; margin:22px 0 8px 6px; }
 [data-testid="stSidebar"] div[role="radiogroup"]{ gap:4px; }
 [data-testid="stSidebar"] div[role="radiogroup"] > label{
   background:transparent; border:1px solid transparent; border-radius:10px; padding:10px 14px; width:100%;
   transition:all .15s ease; cursor:pointer; }
-[data-testid="stSidebar"] div[role="radiogroup"] > label:hover{ background:#18181B; }
+[data-testid="stSidebar"] div[role="radiogroup"] > label:hover{ background:#F1EDFD; }
 [data-testid="stSidebar"] div[role="radiogroup"] > label > div:first-child{ display:none; }
-[data-testid="stSidebar"] div[role="radiogroup"] > label p{ color:#B4B4BC; font-weight:500; font-size:14px; }
+[data-testid="stSidebar"] div[role="radiogroup"] > label p{ color:#5E5878; font-weight:500; font-size:14px; }
 [data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked){
-  background:linear-gradient(90deg, rgba(255,62,48,.24), rgba(255,62,48,.04));
-  border:1px solid rgba(255,62,48,.5); box-shadow:0 0 20px rgba(255,62,48,.18); }
-[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) p{ color:#fff; font-weight:700; }
-.side-status{ background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px; margin-top:26px;
+  background:linear-gradient(90deg, #E6E0FF, #F4F0FF);
+  border:1px solid #CFC5FA; box-shadow:0 4px 14px rgba(124,108,240,.18); }
+[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) p{ color:var(--accent-dark); font-weight:700; }
+.side-status{ background:#FAF8FF; border:1px solid var(--border); border-radius:12px; padding:14px; margin-top:26px;
   font-size:12px; color:var(--muted); line-height:1.7; }
 .side-status b{ color:var(--text); }
 
 /* ---------- Widgets ---------- */
-[data-baseweb="select"] > div, [data-baseweb="input"] > div{ background:#141416 !important; border-color:#232326 !important; }
-[data-baseweb="tag"]{ background:rgba(255,62,48,.18) !important; color:#FFB4AD !important; border-radius:8px !important; }
-input{ color:var(--text) !important; }
+[data-baseweb="select"] > div, [data-baseweb="input"] > div{ background:#FFFFFF !important; border-color:#DDD6F1 !important; color:var(--text) !important; }
+[data-baseweb="select"] span, [data-baseweb="select"] div{ color:var(--text); }
+[data-baseweb="tag"]{ background:#E6E0FF !important; color:var(--accent-dark) !important; border-radius:8px !important; }
+[data-baseweb="tag"] span{ color:var(--accent-dark) !important; }
+[data-baseweb="popover"] ul, [data-baseweb="menu"]{ background:#FFFFFF !important; }
+[data-baseweb="popover"] li{ color:var(--text) !important; }
+input{ color:var(--text) !important; -webkit-text-fill-color:var(--text) !important; }
 .stDownloadButton button, .stButton button{
-  background:linear-gradient(135deg,#FF3E30,#D92A1C); color:#fff; border:none; border-radius:10px; font-weight:700;
-  padding:.6rem 1.2rem; box-shadow:0 6px 22px rgba(255,62,48,.35); transition:transform .1s ease, box-shadow .15s ease; }
-.stDownloadButton button:hover, .stButton button:hover{ transform:translateY(-1px); box-shadow:0 10px 28px rgba(255,62,48,.5); color:#fff; border:none; }
+  background:linear-gradient(135deg,#7C6CF0,#9E8CF5); color:#fff; border:none; border-radius:10px; font-weight:700;
+  padding:.6rem 1.2rem; box-shadow:0 6px 18px rgba(124,108,240,.30); transition:transform .1s ease, box-shadow .15s ease; }
+.stDownloadButton button:hover, .stButton button:hover{ transform:translateY(-1px); box-shadow:0 10px 24px rgba(124,108,240,.40); color:#fff; border:none; }
 .stDownloadButton button p, .stButton button p{ color:#fff !important; }
 
 /* ---------- Tabs ---------- */
 [data-baseweb="tab-list"]{ gap:6px; border-bottom:1px solid var(--border); }
 button[role="tab"]{ background:transparent; border-radius:10px 10px 0 0; padding:12px 18px; }
 button[role="tab"] p{ color:var(--muted); font-weight:600; font-size:14px; }
-button[role="tab"][aria-selected="true"] p{ color:var(--coral); }
-[data-baseweb="tab-highlight"]{ background:var(--coral) !important; height:3px !important; box-shadow:0 0 12px rgba(255,62,48,.8); }
+button[role="tab"][aria-selected="true"] p{ color:var(--accent-dark); }
+[data-baseweb="tab-highlight"]{ background:var(--accent) !important; height:3px !important; }
 [data-baseweb="tab-border"]{ background:transparent !important; }
 
 /* ---------- Cards ---------- */
 .lens-card, [class*="st-key-card_"]{
-  background-color:#141416; border:1px solid #232326; border-radius:12px; padding:20px;
-  box-shadow:0px 4px 20px rgba(0,0,0,0.4); }
+  background-color:#FFFFFF; border:1px solid #E7E2F3; border-radius:12px; padding:20px;
+  box-shadow:0px 4px 20px rgba(110,90,200,0.10); }
 .lens-card{ margin-bottom:14px; }
 .card-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; }
 .card-title{ font-size:15px; font-weight:700; color:var(--text); }
@@ -109,80 +113,80 @@ button[role="tab"][aria-selected="true"] p{ color:var(--coral); }
 .legend i{ display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:6px; }
 
 .page-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
-.page-title{ font-size:26px; font-weight:800; color:#fff; letter-spacing:-0.02em; }
+.page-title{ font-size:26px; font-weight:800; color:var(--text); letter-spacing:-0.02em; }
 .page-sub{ font-size:13px; color:var(--muted); margin-top:2px; }
 .head-chips{ display:flex; gap:8px; flex-wrap:wrap; }
 
 /* ---------- Banner ---------- */
 .banner{ display:flex; justify-content:space-between; align-items:center; gap:18px; flex-wrap:wrap;
-  background:linear-gradient(100deg,#FF3E30 0%,#E8321F 55%,#B3150B 100%); border-radius:14px; padding:16px 22px; margin-bottom:18px;
-  box-shadow:0 10px 36px rgba(255,62,48,.30), inset 0 1px 0 rgba(255,255,255,.18); }
+  background:linear-gradient(100deg,#7C6CF0 0%,#9C86F0 50%,#E58FC0 100%); border-radius:14px; padding:16px 22px; margin-bottom:18px;
+  box-shadow:0 10px 30px rgba(124,108,240,.28), inset 0 1px 0 rgba(255,255,255,.25); }
 .banner-left{ display:flex; align-items:center; gap:14px; }
-.banner-icon{ width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.18); display:flex; align-items:center; justify-content:center; font-size:19px; }
+.banner-icon{ width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center; font-size:19px; }
 .banner-title{ font-weight:800; font-size:16px; color:#fff; }
-.banner-text{ font-size:13px; color:rgba(255,255,255,.88); margin-top:2px; }
-.banner-btn{ background:#fff; color:#C4210F !important; font-weight:800; font-size:13px; padding:10px 20px; border-radius:999px;
-  text-decoration:none !important; box-shadow:0 6px 18px rgba(0,0,0,.25); white-space:nowrap; }
-.banner-btn:hover{ background:#FFF1EF; }
+.banner-text{ font-size:13px; color:rgba(255,255,255,.94); margin-top:2px; }
+.banner-btn{ background:#fff; color:var(--accent-dark) !important; font-weight:800; font-size:13px; padding:10px 20px; border-radius:999px;
+  text-decoration:none !important; box-shadow:0 6px 16px rgba(60,40,140,.20); white-space:nowrap; }
+.banner-btn:hover{ background:#F4F0FF; }
 
 /* ---------- Metric cards ---------- */
 .metric{ min-height:196px; position:relative; overflow:hidden; }
 .metric-top{ display:flex; justify-content:space-between; align-items:center; }
 .metric-label{ font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
-.metric-icon{ width:30px; height:30px; border-radius:9px; background:rgba(255,62,48,.12); border:1px solid rgba(255,62,48,.3);
+.metric-icon{ width:30px; height:30px; border-radius:9px; background:var(--accent-soft); border:1px solid #DCD5FA;
   display:flex; align-items:center; justify-content:center; font-size:14px; }
-.metric-value{ font-size:36px; font-weight:800; color:#fff; margin:10px 0 2px 0; letter-spacing:-0.02em; }
+.metric-value{ font-size:36px; font-weight:800; color:var(--text); margin:10px 0 2px 0; letter-spacing:-0.02em; }
 .metric-value small{ font-size:15px; font-weight:600; color:var(--muted); margin-left:6px; letter-spacing:0; }
 .delta-up{ color:var(--green); font-weight:700; font-size:13px; }
-.delta-coral{ color:var(--coral2); font-weight:700; font-size:13px; }
+.delta-accent{ color:var(--accent-dark); font-weight:700; font-size:13px; }
 .metric-note{ font-size:12px; color:var(--muted); margin-left:6px; }
 .spark{ width:100%; height:56px; margin-top:10px; display:block; }
-.progress{ height:8px; border-radius:99px; background:#232326; margin-top:16px; overflow:hidden; }
-.progress > span{ display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#FF3E30,#FF8A5C); box-shadow:0 0 12px rgba(255,62,48,.6); }
+.progress{ height:8px; border-radius:99px; background:#ECE8F8; margin-top:16px; overflow:hidden; }
+.progress > span{ display:block; height:100%; border-radius:99px; background:linear-gradient(90deg,#7C6CF0,#E58FC0); }
 .mini-row{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
 
 /* ---------- Chips ---------- */
 .chip{ display:inline-block; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.02em; margin:1px 4px 1px 0; white-space:nowrap; }
-.chip-red{ background:rgba(255,62,48,.15); color:#FF8A80; border:1px solid rgba(255,62,48,.35); }
-.chip-coral{ background:rgba(255,138,92,.14); color:#FFA27A; border:1px solid rgba(255,138,92,.35); }
-.chip-amber{ background:rgba(245,165,36,.14); color:#F7BE5C; border:1px solid rgba(245,165,36,.35); }
-.chip-green{ background:rgba(74,222,128,.12); color:#6EE7A0; border:1px solid rgba(74,222,128,.30); }
-.chip-blue{ background:rgba(96,165,250,.12); color:#8FBFFB; border:1px solid rgba(96,165,250,.30); }
-.chip-gray{ background:#1C1C1F; color:#A1A1AA; border:1px solid #2A2A2E; }
+.chip-red{ background:#FDE8EA; color:#C23B52; border:1px solid #F7C2CA; }
+.chip-rose{ background:#FBE8F3; color:#B1428A; border:1px solid #F1C3DE; }
+.chip-amber{ background:#FFF1DC; color:#B26E0C; border:1px solid #F7DCB0; }
+.chip-green{ background:#E3F6EE; color:#23805F; border:1px solid #BFE8D7; }
+.chip-blue{ background:#E5F0FD; color:#2F6DB5; border:1px solid #C2DAF5; }
+.chip-gray{ background:#F0EEF7; color:#6B6685; border:1px solid #E1DDEE; }
 
 /* ---------- Tables ---------- */
 .table-wrap{ width:100%; overflow-x:auto; }
 .lens-table{ width:100%; border-collapse:collapse; font-size:13px; color:var(--text); }
 .lens-table th{ text-align:left; color:var(--muted); font-weight:700; text-transform:uppercase; font-size:11px; letter-spacing:.08em;
   padding:10px 12px; border-bottom:1px solid var(--border); white-space:nowrap; }
-.lens-table td{ padding:13px 12px; border-bottom:1px solid #1C1C1F; vertical-align:top; }
-.lens-table tr:hover td{ background:#18181B; }
-.lens-table tr.row-high td{ background:rgba(255,62,48,.07); }
-.lens-table tr.row-high td:first-child{ box-shadow:inset 3px 0 0 var(--coral); }
-.lens-table tr.row-med td{ background:rgba(245,165,36,.06); }
-.lens-table tr.row-med td:first-child{ box-shadow:inset 3px 0 0 var(--amber); }
-.idea-title{ font-weight:700; color:#fff; font-size:14px; }
+.lens-table td{ padding:13px 12px; border-bottom:1px solid #F0EDF8; vertical-align:top; }
+.lens-table tr:hover td{ background:#FAF8FF; }
+.lens-table tr.row-high td{ background:#FFF1F3; }
+.lens-table tr.row-high td:first-child{ box-shadow:inset 3px 0 0 var(--rose); }
+.lens-table tr.row-med td{ background:#FFF8EC; }
+.lens-table tr.row-med td:first-child{ box-shadow:inset 3px 0 0 var(--peach); }
+.idea-title{ font-weight:700; color:var(--text); font-size:14px; }
 .idea-sub{ font-size:11px; color:var(--muted); margin-top:3px; }
-.score-num{ font-weight:800; font-size:18px; color:#fff; }
-.bar{ height:6px; background:#232326; border-radius:99px; overflow:hidden; margin-top:6px; min-width:110px; }
-.bar > span{ display:block; height:100%; background:linear-gradient(90deg,#FF3E30,#FF8A5C); border-radius:99px; }
-.evidence{ font-size:12px; color:#C9C9CF; line-height:1.5; margin-bottom:6px; max-width:420px; }
+.score-num{ font-weight:800; font-size:18px; color:var(--text); }
+.bar{ height:6px; background:#ECE8F8; border-radius:99px; overflow:hidden; margin-top:6px; min-width:110px; }
+.bar > span{ display:block; height:100%; background:linear-gradient(90deg,#7C6CF0,#E58FC0); border-radius:99px; }
+.evidence{ font-size:12px; color:#4A4566; line-height:1.5; margin-bottom:6px; max-width:420px; }
 .ev-meta{ color:var(--muted); font-size:11px; }
-.rank{ width:28px; height:28px; border-radius:8px; background:rgba(255,62,48,.14); border:1px solid rgba(255,62,48,.35);
-  color:#FF8A80; font-weight:800; display:flex; align-items:center; justify-content:center; }
+.rank{ width:28px; height:28px; border-radius:8px; background:var(--accent-soft); border:1px solid #D6CEFA;
+  color:var(--accent-dark); font-weight:800; display:flex; align-items:center; justify-content:center; }
 
 .faq-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; margin-top:8px; }
-.faq{ background:#101012; border:1px solid var(--border); border-radius:12px; padding:14px; }
-.faq-q{ font-size:13px; color:#fff; font-weight:600; line-height:1.5; margin:8px 0; }
+.faq{ background:#FAF8FF; border:1px solid var(--border); border-radius:12px; padding:14px; }
+.faq-q{ font-size:13px; color:var(--text); font-weight:600; line-height:1.5; margin:8px 0; }
 .faq-meta{ font-size:11px; color:var(--muted); }
 .section-title{ font-size:13px; font-weight:700; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; margin:20px 0 6px 0; }
 .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px; }
-.stat{ background:#101012; border:1px solid var(--border); border-radius:12px; padding:14px; }
-.stat b{ display:block; font-size:24px; color:#fff; }
+.stat{ background:#FAF8FF; border:1px solid var(--border); border-radius:12px; padding:14px; }
+.stat b{ display:block; font-size:24px; color:var(--text); }
 .stat span{ font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
 .mod-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
-.mod h4{ margin:0 0 6px 0; font-size:15px; color:#fff; }
-.mod p{ font-size:13px; color:#A1A1AA; line-height:1.6; margin:0 0 10px 0; }
+.mod h4{ margin:0 0 6px 0; font-size:15px; color:var(--text); }
+.mod p{ font-size:13px; color:var(--muted); line-height:1.6; margin:0 0 10px 0; }
 """
 st.markdown(f"<style>{APP_CSS}</style>", unsafe_allow_html=True)
 
@@ -209,7 +213,7 @@ def chip(text: str, kind: str = "gray") -> str:
 
 SENT_CHIP = {"Positive": "green", "Neutral": "gray", "Negative": "red"}
 INTENT_CHIP = {"Question": "blue", "Feature Request": "amber", "Complaint": "red", "Casual Engagement": "gray"}
-LANG_CHIP = {"English": "blue", "Tamil": "amber", "Code-Mixed": "coral"}
+LANG_CHIP = {"English": "blue", "Tamil": "amber", "Code-Mixed": "rose"}
 
 
 def card(key: str):
@@ -240,10 +244,10 @@ def dark_chart(chart, height=290):
         .configure_view(stroke=None)
         .configure_axis(
             gridColor=C["border"], domainColor=C["border"], tickColor=C["border"],
-            labelColor="#A1A1AA", titleColor="#A1A1AA", labelFont="Inter", titleFont="Inter",
+            labelColor=C["muted"], titleColor=C["muted"], labelFont="Inter", titleFont="Inter",
             labelFontSize=11, titleFontSize=11, titleFontWeight=600,
         )
-        .configure_legend(labelColor="#D4D4D8", titleColor="#A1A1AA", labelFont="Inter")
+        .configure_legend(labelColor=C["text"], titleColor=C["muted"], labelFont="Inter")
     )
 
 
@@ -637,7 +641,7 @@ def render_banner(df: pd.DataFrame):
     st.markdown(flat(f'''
     <div class="banner">
       <div class="banner-left">
-        <div class="banner-icon">⚡</div>
+        <div class="banner-icon">✨</div>
         <div>
           <div class="banner-title">Finish setting up your engine</div>
           <div class="banner-text">All 4 pipeline modules are running in heuristic mode · {flagged} comments await review ·
@@ -651,19 +655,19 @@ def render_banner(df: pd.DataFrame):
 def activity_chart(trend: pd.DataFrame):
     base = alt.Chart(trend).encode(x=alt.X("date:T", axis=alt.Axis(title=None, format="%b %d", tickCount=6, labelAngle=0)))
     area = base.mark_area(
-        line={"color": C["coral"], "strokeWidth": 3}, interpolate="monotone",
+        line={"color": C["accent"], "strokeWidth": 3}, interpolate="monotone",
         color=alt.Gradient(gradient="linear", x1=1, x2=1, y1=1, y2=0,
-                           stops=[alt.GradientStop(color="rgba(255,62,48,0.38)", offset=0),
-                                  alt.GradientStop(color="rgba(255,62,48,0.0)", offset=1)]),
+                           stops=[alt.GradientStop(color="rgba(124,108,240,0.34)", offset=0),
+                                  alt.GradientStop(color="rgba(124,108,240,0.0)", offset=1)]),
     ).encode(
         y=alt.Y("analyzed:Q", scale=alt.Scale(zero=False),
-                axis=alt.Axis(title="Comments analysed", titleColor=C["coral"])),
+                axis=alt.Axis(title="Comments analysed", titleColor=C["accent"])),
         tooltip=[alt.Tooltip("date:T", format="%d %b"), alt.Tooltip("analyzed:Q", title="Analysed"),
                  alt.Tooltip("code_mixed_pct:Q", title="Code-mixed %")],
     )
-    line = base.mark_line(color=C["olive"], strokeWidth=3, interpolate="monotone").encode(
+    line = base.mark_line(color=C["mint"], strokeWidth=3, interpolate="monotone").encode(
         y=alt.Y("code_mixed_pct:Q", scale=alt.Scale(zero=False),
-                axis=alt.Axis(title="Code-mixed share (%)", titleColor=C["olive"], orient="right", grid=False)),
+                axis=alt.Axis(title="Code-mixed share (%)", titleColor=C["mint"], orient="right", grid=False)),
     )
     return dark_chart(alt.layer(area, line).resolve_scale(y="independent"))
 
@@ -672,7 +676,7 @@ def engagement_chart(trend: pd.DataFrame):
     bars = alt.Chart(trend).mark_bar(size=9, cornerRadiusTopLeft=3, cornerRadiusTopRight=3).encode(
         x=alt.X("date:T", axis=alt.Axis(title=None, format="%b %d", tickCount=6, labelAngle=0)),
         y=alt.Y("engagement:Q", axis=alt.Axis(title="Likes + replies")),
-        color=alt.condition("datum.recent", alt.value(C["coral"]), alt.value(C["deep"])),
+        color=alt.condition("datum.recent", alt.value(C["accent"]), alt.value(C["soft"])),
         tooltip=[alt.Tooltip("date:T", format="%d %b"), alt.Tooltip("engagement:Q", title="Engagement")],
     )
     return dark_chart(bars)
@@ -689,16 +693,16 @@ def render_dashboard(df, opps, faqs, trend):
             st.markdown(flat(f'''
             <div class="card-head"><div><div class="card-title">AI Activity &amp; Language Trend Overview</div>
             <div class="card-sub">Comments processed vs. share of code-mixed language</div></div>
-            <div class="legend"><span><i style="background:{C["coral"]}"></i>Analysed</span>
-            <span><i style="background:{C["olive"]}"></i>Code-mixed %</span></div></div>'''), unsafe_allow_html=True)
+            <div class="legend"><span><i style="background:{C["accent"]}"></i>Analysed</span>
+            <span><i style="background:{C["mint"]}"></i>Code-mixed %</span></div></div>'''), unsafe_allow_html=True)
             show_chart(activity_chart(trend))
     with c2:
         with card("engage"):
             st.markdown(flat(f'''
             <div class="card-head"><div><div class="card-title">Engagement Trend</div>
             <div class="card-sub">Daily likes + replies · last 7 days highlighted</div></div>
-            <div class="legend"><span><i style="background:{C["coral"]}"></i>Recent</span>
-            <span><i style="background:{C["deep"]}"></i>Earlier</span></div></div>'''), unsafe_allow_html=True)
+            <div class="legend"><span><i style="background:{C["accent"]}"></i>Recent</span>
+            <span><i style="background:{C["soft"]}"></i>Earlier</span></div></div>'''), unsafe_allow_html=True)
             show_chart(engagement_chart(trend))
 
     st.markdown("<div style='height:14px'></div>", unsafe_allow_html=True)
@@ -714,14 +718,14 @@ def render_dashboard(df, opps, faqs, trend):
         <div class="lens-card metric"><div class="metric-top"><span class="metric-label">Total followers / reach</span><span class="metric-icon">👥</span></div>
         <div class="metric-value">84.6K</div>
         <div><span class="delta-up">▲ +3.2%</span><span class="metric-note">vs. last month</span></div>
-        {sparkline_svg(reach_series, C["coral"])}</div>'''), unsafe_allow_html=True)
+        {sparkline_svg(reach_series, C["accent"])}</div>'''), unsafe_allow_html=True)
     with m2:
         st.markdown(flat(f'''
         <div class="lens-card metric"><div class="metric-top"><span class="metric-label">Processing queue</span><span class="metric-icon">⏳</span></div>
         <div class="metric-value">{analyzed}<small>analysed · {queued} scheduled</small></div>
-        <div><span class="delta-coral">{pct}% of batch complete</span></div>
+        <div><span class="delta-accent">{pct}% of batch complete</span></div>
         <div class="progress"><span style="width:{pct}%"></span></div>
-        <div class="mini-row">{chip(f"{int(df['flagged'].sum())} flagged", "red")}{chip(f"{int((df['language'] == 'Code-Mixed').sum())} code-mixed", "coral")}{chip(f"{int((df['language'] == 'Tamil').sum())} Tamil", "amber")}</div></div>'''), unsafe_allow_html=True)
+        <div class="mini-row">{chip(f"{int(df['flagged'].sum())} flagged", "red")}{chip(f"{int((df['language'] == 'Code-Mixed').sum())} code-mixed", "rose")}{chip(f"{int((df['language'] == 'Tamil').sum())} Tamil", "amber")}</div></div>'''), unsafe_allow_html=True)
     with m3:
         st.markdown(flat(f'''
         <div class="lens-card metric"><div class="metric-top"><span class="metric-label">Content insights generated</span><span class="metric-icon">💡</span></div>
@@ -760,9 +764,9 @@ def render_dashboard(df, opps, faqs, trend):
 
         if not faqs.empty:
             cards = "".join(
-                flat(f'''<div class="faq"><div>{chip(f["topic"], "coral")}</div>
+                flat(f'''<div class="faq"><div>{chip(f["topic"], "rose")}</div>
                 <div class="faq-q">“{esc(trunc(f["canonical"], 150))}”</div>
-                <div class="faq-meta">Asked by <b style="color:#fff">{f["asked"]}</b> viewers · ♥ {f["total_likes"]} · {esc(f["languages"])}</div></div>''')
+                <div class="faq-meta">Asked by <b style="color:var(--text)">{f["asked"]}</b> viewers · ♥ {f["total_likes"]} · {esc(f["languages"])}</div></div>''')
                 for f in faqs.to_dict("records")
             )
             st.markdown(f'<div class="lens-card"><div class="card-title">Extracted FAQ clusters</div>'
@@ -784,13 +788,13 @@ def render_dashboard(df, opps, faqs, trend):
                     sev_chip,
                     f'<div style="max-width:420px;line-height:1.5">{esc(r.text)}</div><div class="ev-meta" style="margin-top:4px">{esc(r.comment_id)} · {esc(r.platform)} · {r.timestamp.strftime("%d %b, %H:%M")}</div>',
                     chip(r.language, LANG_CHIP.get(r.language, "gray")), reasons, f'♥ {r.likes}',
-                    f'<span style="color:#FFB4AD;font-weight:600">{esc(r.recommended_action)}</span>',
+                    f'<span style="color:#B63A55;font-weight:600">{esc(r.recommended_action)}</span>',
                 ])
                 classes.append("row-high" if r.flag_severity == "High" else "row-med")
             n_high = int((fl["flag_severity"] == "High").sum())
             st.markdown(flat(f'''<div class="lens-card"><div class="card-head"><div><div class="card-title">Flagged review queue</div>
             <div class="card-sub">{len(fl)} comments need attention · {n_high} high severity</div></div>
-            <div class="legend"><span><i style="background:{C["coral"]}"></i>High</span><span><i style="background:{C["amber"]}"></i>Medium</span></div></div>''')
+            <div class="legend"><span><i style="background:{C["rose"]}"></i>High</span><span><i style="background:{C["amber"]}"></i>Medium</span></div></div>''')
                         + html_table(["Severity", "Comment", "Language", "Trigger", "Likes", "Recommended action"], rows, classes)
                         + "</div>", unsafe_allow_html=True)
 
@@ -855,7 +859,7 @@ def render_language(df):
             ch = alt.Chart(lang_counts).mark_bar(cornerRadiusTopRight=4, cornerRadiusBottomRight=4, size=26).encode(
                 y=alt.Y("language:N", sort="-x", axis=alt.Axis(title=None)),
                 x=alt.X("comments:Q", axis=alt.Axis(title="Comments", tickMinStep=1)),
-                color=alt.value(C["coral"]), tooltip=["language", "comments"])
+                color=alt.value(C["accent"]), tooltip=["language", "comments"])
             show_chart(dark_chart(ch, 240))
     with c2:
         with card("langsent"):
@@ -865,11 +869,11 @@ def render_language(df):
                 x=alt.X("language:N", axis=alt.Axis(title=None, labelAngle=0)),
                 y=alt.Y("comments:Q", axis=alt.Axis(title="Comments", tickMinStep=1)),
                 color=alt.Color("sentiment:N", scale=alt.Scale(domain=["Positive", "Neutral", "Negative"],
-                                                               range=[C["olive"], "#5B5B66", C["coral"]]), legend=alt.Legend(title=None, orient="bottom")),
+                                                               range=[C["mint"], "#C9C3E3", C["rose"]]), legend=alt.Legend(title=None, orient="bottom")),
                 tooltip=["language", "sentiment", "comments"])
             show_chart(dark_chart(ch, 240))
     emo = pd.Series([e for s in df["emojis"] for e in s.split()]).value_counts().head(12)
-    chips_html = "".join(f'<span class="chip chip-gray" style="font-size:15px;padding:6px 12px">{esc(e)} <b style="color:#fff">{n}</b></span>' for e, n in emo.items())
+    chips_html = "".join(f'<span class="chip chip-gray" style="font-size:15px;padding:6px 12px">{esc(e)} <b style="color:var(--text)">{n}</b></span>' for e, n in emo.items())
     st.markdown(f'<div class="lens-card"><div class="card-title">Emoji signal</div><div class="card-sub">Extracted as a separate feature before text normalisation</div><div style="margin-top:12px">{chips_html or "No emojis in current selection"}</div></div>', unsafe_allow_html=True)
 
 
@@ -886,7 +890,7 @@ def render_pipeline(df):
     rows = []
     for r in df.head(6).itertuples():
         rows.append([
-            f'<div style="max-width:300px">{esc(r.text)}</div>', f'<div style="max-width:260px;color:#A1A1AA">{esc(r.clean_text)}</div>',
+            f'<div style="max-width:300px">{esc(r.text)}</div>', f'<div style="max-width:260px;color:var(--muted)">{esc(r.clean_text)}</div>',
             esc(r.emojis) or "—", chip(r.language, LANG_CHIP.get(r.language, "gray")),
             chip(r.sentiment, SENT_CHIP[r.sentiment]) + chip(r.intent, INTENT_CHIP[r.intent]), esc(r.topic),
         ])
@@ -903,7 +907,7 @@ def main():
     icons = {"Dashboard": "▦", "Comment Explorer": "☰", "Language Intelligence": "◍", "Pipeline": "⚙"}
 
     with st.sidebar:
-        st.markdown(flat('''<div class="brand"><div class="brand-logo">🔴</div><div><div class="brand-name">CreatorLens AI</div>
+        st.markdown(flat('''<div class="brand"><div class="brand-logo">🧿</div><div><div class="brand-name">CreatorLens AI</div>
         <div class="brand-sub">VERSION 2.0 · MULTILINGUAL</div></div></div>'''), unsafe_allow_html=True)
         st.markdown('<div class="side-label">Menu</div>', unsafe_allow_html=True)
         page = st.radio("Navigation", list(icons), format_func=lambda x: f"{icons[x]}   {x}", label_visibility="collapsed")
