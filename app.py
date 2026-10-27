@@ -32,11 +32,13 @@ st.set_page_config(
 # =============================================================================
 # 1. CUSTOM CSS / PROFESSIONAL STYLING LAYER
 # =============================================================================
+
 C = dict(
-    bg="#0B0B0C", card="#141416", border="#232326", coral="#FF3E30", coral2="#FF8A5C",
+    bg="#DCE3E8", card="#141416", border="#232326", coral="#FF3E30", coral2="#FF8A5C",
     olive="#9BAA3C", text="#F4F4F5", muted="#8A8A93", amber="#F5A524", green="#4ADE80",
     deep="#7F1D1D",
 )
+
 
 APP_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
